@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand"><span class="logo">🖨️</span><span data-biz="name"></span> <small style="opacity:.6;font-weight:600">| Admin</small></a>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="order.html">View Site Order Page</a>
+      <a href="#" id="logoutLink" style="display:none;color:#ff9b9b">Log Out</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- LOGIN -->
+<div id="loginView" class="login-box">
+  <div class="card">
+    <h2 style="text-align:center">🔐 Admin Login</h2>
+    <p class="muted center" style="font-size:.88rem;margin-bottom:1.2rem">Owner access only</p>
+    <div id="loginError" class="error" style="display:none"></div>
+    <div class="field"><label for="adminPass">Password</label><input type="password" id="adminPass" placeholder="Enter admin password"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" id="loginBtn">Log In</button>
+    <p class="muted center" style="font-size:.8rem;margin-top:.9rem">Default password: <b>admin123</b> — change it in Settings after logging in.</p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashView" class="container section" style="display:none;padding-top:2rem">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem">
+    <div><h2>📋 Admin Dashboard</h2><p class="muted">Manage orders, prices, services and business info.</p></div>
+    <span class="badge badge-new" id="newCountBadge" style="display:none">New orders</span>
+  </div>
+
+  <div class="grid grid-4" style="margin-top:1.4rem">
+    <div class="stat-card"><div class="n" id="stTotal">0</div><div class="l">Total Orders</div></div>
+    <div class="stat-card"><div class="n" id="stPending">0</div><div class="l">Awaiting Action</div></div>
+    <div class="stat-card"><div class="n" id="stReady">0</div><div class="l">Ready for Collection</div></div>
+    <div class="stat-card"><div class="n" id="stRevenue">R0.00</div><div class="l">Order Value (ZAR)</div></div>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="active" data-tab="orders">🧾 Orders</button>
+    <button data-tab="prices">💰 Printing Prices</button>
+    <button data-tab="services">🛠️ Services</button>
+    <button data-tab="business">🏪 Business Info</button>
+    <button data-tab="security">🔐 Security</button>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div id="tab-orders">
+    <div class="field" style="max-width:340px"><input type="text" id="orderSearch" placeholder="🔍 Search by order #, name or phone…"></div>
+    <div id="ordersList"></div>
+  </div>
+
+  <!-- PRICES TAB -->
+  <div id="tab-prices" style="display:none">
+    <div class="card" style="max-width:520px">
+      <div class="field"><label for="pBw">Black &amp; White price per page (R)</label><input type="number" id="pBw" step="0.10" min="0"></div>
+      <div class="field"><label for="pColour">Colour price per page (R)</label><input type="number" id="pColour" step="0.10" min="0"></div>
+      <label style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem">
+        <input type="checkbox" id="pColourEnabled" style="width:auto"> Colour printing available
+      </label>
+      <button class="btn btn-primary" id="savePrices">Save Prices</button>
+      <p class="muted" id="pricesMsg" style="font-size:.85rem;margin-top:.7rem"></p>
+      <p class="muted" style="font-size:.8rem;margin-top:.6rem">Example: 10 pages × R2.00 = R20.00. Totals on the order page update automatically.</p>
+    </div>
+  </div>
+
+  <!-- SERVICES TAB -->
+  <div id="tab-services" style="display:none">
+    <div class="card" style="max-width:720px">
+      <p class="muted" style="margin-bottom:1rem">Edit service names, prices and descriptions. Click “+ Add Service” to add more.</p>
+      <div id="servicesEditor"></div>
+      <button class="btn btn-ghost" style="border-color:var(--primary);color:var(--primary)" id="addService">＋ Add Service</button>
+      <button class="btn btn-primary" id="saveServices" style="margin-left:.6rem">Save Services</button>
+      <p class="muted" id="servicesMsg" style="font-size:.85rem;margin-top:.7rem"></p>
+    </div>
+  </div>
+
+  <!-- BUSINESS TAB -->
+  <div id="tab-business" style="display:none">
+    <div class="card" style="max-width:640px">
+      <div class="grid grid-2">
+        <div class="field"><label for="bName">Business Name</label><input type="text" id="bName"></div>
+        <div class="field"><label for="bPhone">Phone / WhatsApp (display)</label><input type="text" id="bPhone"></div>
+      </div>
+      <div class="field"><label for="bWhatsapp">WhatsApp Number (digits only, e.g. 27600000000)</label><input type="text" id="bWhatsapp"></div>
+      <div class="field"><label for="bEmail">Email Address</label><input type="email" id="bEmail"></div>
+      <div class="field"><label for="bAddress">Physical Address</label><input type="text" id="bAddress"></div>
+      <div class="field"><label for="bHours">Operating Hours</label><input type="text" id="bHours" placeholder="Mon–Fri: 08:00 – 17:00 | Sat: …"></div>
+      <div class="field"><label for="bMap">Google Maps Search Query</label><input type="text" id="bMap" placeholder="e.g. 123 Main Road, Johannesburg"></div>
+      <button class="btn btn-primary" id="saveBiz">Save Business Info</button>
+      <p class="muted" id="bizMsg" style="font-size:.85rem;margin-top:.7rem"></p>
+    </div>
+  </div>
+
+  <!-- SECURITY TAB -->
+  <div id="tab-security" style="display:none">
+    <div class="card" style="max-width:440px">
+      <div class="field"><label for="oldPass">Current Password</label><input type="password" id="oldPass"></div>
+      <div class="field"><label for="newPass">New Password</label><input type="password" id="newPass"></div>
+      <button class="btn btn-primary" id="savePass">Change Password</button>
+      <p class="muted" id="passMsg" style="font-size:.85rem;margin-top:.7rem"></p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container"><div class="copy" style="border:0;margin:0">© <span id="year"></span> <span data-biz="name"></span> — Admin Dashboard</div></div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+/* ================= ADMIN DASHBOARD ================= */
+const $ = id => document.getElementById(id);
+const STATUSES = ['Order Received','Processing','Ready for Collection','Collected'];
+const badgeClass = s => ({'Order Received':'badge-received','Processing':'badge-processing','Ready for Collection':'badge-ready','Collected':'badge-collected'}[s] || 'badge-received');
+const fmt = iso => new Date(iso).toLocaleString('en-ZA',{dateStyle:'short',timeStyle:'short'});
+
+/* ---------- auth ---------- */
+function isLoggedIn(){ return sessionStorage.getItem('icafe_admin') === '1'; }
+function showDash(){ $('loginView').style.display='none'; $('dashView').style.display='block'; $('logoutLink').style.display=''; refreshAll(); }
+function showLogin(){ $('loginView').style.display='block'; $('dashView').style.display='none'; }
+
+$('loginBtn').addEventListener('click', () => {
+  const pass = DB.get('admin_pass', 'admin123');
+  if($('adminPass').value === pass){ sessionStorage.setItem('icafe_admin','1'); $('adminPass').value=''; $('loginError').style.display='none'; showDash(); }
+  else { $('loginError').textContent = 'Incorrect password. Try again.'; $('loginError').style.display='block'; }
+});
+$('adminPass').addEventListener('keydown', e => { if(e.key === 'Enter') $('loginBtn').click(); });
+$('logoutLink').addEventListener('click', e => { e.preventDefault(); sessionStorage.removeItem('icafe_admin'); showLogin(); });
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('.admin-tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.admin-tabs button').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  ['orders','prices','services','business','security'].forEach(t => $('tab-'+t).style.display = 'none');
+  $('tab-'+b.dataset.tab).style.display = 'block';
+  if(b.dataset.tab === 'orders') renderOrders();
+}));
+
+/* ---------- IndexedDB access (same DB as order page) ---------- */
+const FileStore = {
+  db:null,
+  open(){ return new Promise((res,rej)=>{ if(this.db) return res(this.db);
+    const r = indexedDB.open('icafe_files',1);
+    r.onupgradeneeded = e => e.target.result.createObjectStore('files');
+    r.onsuccess = e => { this.db = e.target.result; res(this.db); };
+    r.onerror = rej; });},
+  async getAll(orderNo){ const db = await this.open(); const out=[];
+    await new Promise(res=>{ const c = db.transaction('files').objectStore('files').openCursor();
+      c.onsuccess = e => { const cur = e.target.result;
+        if(cur){ if(String(cur.key).indexOf(orderNo+'_')===0) out.push({key:cur.key, file:cur.value}); cur.continue(); } else res(); };
+      c.onerror = () => res(); });
+    return out; },
+  async del(orderNo){ const db = await this.open(); const st = db.transaction('files','readwrite').objectStore('files');
+    (await this.getAll(orderNo)).forEach(x => st.delete(x.key)); }
+};
+
+/* ---------- stats ---------- */
+function renderStats(){
+  const orders = DB.get('orders', []);
+  const pending = orders.filter(o => ['Order Received','Processing'].includes(o.status)).length;
+  const ready = orders.filter(o => o.status === 'Ready for Collection').length;
+  const value = orders.reduce((s,o) => s + o.total, 0);
+  $('stTotal').textContent = orders.length;
+  $('stPending').textContent = pending;
+  $('stReady').textContent = ready;
+  $('stRevenue').textContent = fmtR(value);
+  const n = orders.filter(o => o.status === 'Order Received').length;
+  $('newCountBadge').style.display = n ? '' : 'none';
+  $('newCountBadge').textContent = '● ' + n + ' new order' + (n>1?'s':'');
+}
+
+/* ---------- orders ---------- */
+function renderOrders(){
+  const q = ($('orderSearch').value || '').toLowerCase();
+  let orders = DB.get('orders', []).slice().sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+  if(q) orders = orders.filter(o => o.orderNo.toLowerCase().includes(q) || o.name.toLowerCase().includes(q) || o.phone.replace(/\D/g,'').includes(q.replace(/\D/g,'')));
+  if(!orders.length){ $('ordersList').innerHTML = '<div class="card center"><p class="muted">No orders found. New orders placed on the website appear here instantly.</p></div>'; return; }
+
+  $('ordersList').innerHTML = orders.map(o => `
+    <div class="card" style="margin-bottom:1rem;${o.status==='Order Received' ? 'border-left:5px solid #e23b3b;' : ''}">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center">
+        <div><b class="order-no" style="font-size:1.05rem">${o.orderNo}</b> ${o.status==='Order Received'?'<span class="badge badge-new">New</span>':''}
+          <div class="muted" style="font-size:.82rem">Placed: ${fmt(o.createdAt)}</div></div>
+        <select onchange="setStatus('${o.orderNo}', this.value)" style="width:auto;font-weight:700">
+          ${STATUSES.map(s => `<option ${s===o.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <div class="table-wrap" style="margin-top:.8rem"><table>
+        <tr><th style="width:22%">Customer</th><th style="width:26%">Documents</th><th style="width:22%">Print Specs</th><th style="width:18%">Total</th><th style="width:12%">Actions</th></tr>
+        <tr>
+          <td><b>${o.name}</b><br><span class="muted" style="font-size:.85rem">${o.phone}</span>
+              ${o.instructions?`<br><span style="font-size:.82rem;color:#a86a00">📝 ${o.instructions}</span>`:''}</td>
+          <td>${o.files.map(f => `<div style="font-size:.85rem">📄 ${f.name} <span class="muted">(${(f.size/1024).toFixed(0)} KB${f.pages?', '+f.pages+' pg':''})</span></div>`).join('')}</td>
+          <td style="font-size:.85rem">${o.colour?'🌈 Colour':'⚫ B&amp;W'} · ${o.sides==='double'?'Double':'Single'}-sided<br>${o.pages} pages × ${o.copies} copies${o.pageRange?`<br>Range: ${o.pageRange}`:''}</td>
+          <td><b style="color:var(--primary)">${fmtR(o.total)}</b><br><span class="muted" style="font-size:.8rem">${fmtR(o.unitPrice)}/page</span></td>
+          <td>
+            <button class="btn btn-primary btn-sm" style="margin-bottom:.35rem" onclick="downloadFiles('${o.orderNo}')">⬇ Download</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteOrder('${o.orderNo}')">🗑 Delete</button>
+          </td>
+        </tr>
+      </table></div>
+    </div>`).join('');
+}
+$('orderSearch').addEventListener('input', renderOrders);
+
+window.setStatus = (no, status) => {
+  const orders = DB.get('orders', []);
+  const o = orders.find(x => x.orderNo === no);
+  if(!o || o.status === status) return;
+  o.status = status;
+  o.history = o.history || [];
+  o.history.push({status, at: new Date().toISOString()});
+  DB.set('orders', orders);
+  renderStats(); renderOrders();
+};
+
+window.downloadFiles = async no => {
+  const files = await FileStore.getAll(no);
+  if(!files.length){ alert('No files stored for this order (they may have been cleared by the browser).'); return; }
+  for(const f of files){
+    const url = URL.createObjectURL(f.file);
+    const a = document.createElement('a');
+    a.href = url; a.download = f.file.name || 'document';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+};
+
+window.deleteOrder = async no => {
+  if(!confirm('Delete order ' + no + ' and its uploaded files? This cannot be undone.')) return;
+  await FileStore.del(no);
+  DB.set('orders', DB.get('orders', []).filter(o => o.orderNo !== no));
+  renderStats(); renderOrders();
+};
+
+/* ---------- prices ---------- */
+function loadPrices(){
+  const p = getPrices();
+  $('pBw').value = p.bw; $('pColour').value = p.colour; $('pColourEnabled').checked = p.colourEnabled;
+}
+$('savePrices').addEventListener('click', () => {
+  const bw = parseFloat($('pBw').value), col = parseFloat($('pColour').value);
+  if(isNaN(bw) || bw < 0 || isNaN(col) || col < 0){ $('pricesMsg').textContent = 'Please enter valid prices.'; return; }
+  DB.set('prices', {bw, colour: col, colourEnabled: $('pColourEnabled').checked});
+  $('pricesMsg').textContent = '✅ Prices saved — the order page and homepage now use these prices.';
+});
+
+/* ---------- services ---------- */
+const svcDefaults = [
+  {name:"Document Printing", price:"From R3.00/page", desc:"Black & white and colour printing of PDFs, Word docs and images. Single or double-sided, any quantity."},
+  {name:"CV Typing & Creation", price:"R80.00", desc:"Professional CVs typed from scratch or redesigned. Printed copies included."},
+  {name:"Job Applications", price:"From R50.00", desc:"CV printing, certified copy assistance, online job application submissions."},
+  {name:"School Applications", price:"From R50.00", desc:"University/college application support, document printing and certified copies."},
+  {name:"Funeral Programmes", price:"From R150.00", desc:"Respectful, professionally designed and printed funeral programmes with fast turnaround."},
+  {name:"Tax Number Registration", price:"R120.00", desc:"Assistance registering your SARS tax number quickly and correctly."},
+  {name:"Document Scanning", price:"R5.00/page", desc:"Scanning to PDF or email — contracts, IDs, certificates and photo albums."},
+  {name:"Internet Browsing", price:"R20.00/30 min", desc:"Fast internet access for emails, job searches, forms and downloads."},
+  {name:"Fax & Emailing", price:"R10.00/document", desc:"Send and receive faxes, or let us email your documents for you."}
+];
+function renderServicesEditor(){
+  const services = DB.get('services', svcDefaults);
+  $('servicesEditor').innerHTML = services.map((s,i) => `
+    <div class="grid" style="grid-template-columns:2fr 1.3fr auto;gap:.6rem;align-items:end;margin-bottom:.7rem">
+      <div class="field" style="margin:0"><label>Name</label><input type="text" value="${s.name.replace(/"/g,'&quot;')}" data-i="${i}" data-f="name"></div>
+      <div class="field" style="margin:0"><label>Price</label><input type="text" value="${s.price.replace(/"/g,'&quot;')}" data-i="${i}" data-f="price"></div>
+      <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✖</button>
+      <div class="field" style="margin:0;grid-column:1/4"><label>Description</label><input type="text" value="${(s.desc||'').replace(/"/g,'&quot;')}" data-i="${i}" data-f="desc"></div>
+    </div>`).join('');
+}
+$('addService').addEventListener('click', () => {
+  $('servicesEditor').insertAdjacentHTML('beforeend', `
+    <div class="grid" style="grid-template-columns:2fr 1.3fr auto;gap:.6rem;align-items:end;margin-bottom:.7rem">
+      <div class="field" style="margin:0"><label>Name</label><input type="text" data-f="name"></div>
+      <div class="field" style="margin:0"><label>Price</label><input type="text" data-f="price"></div>
+      <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✖</button>
+      <div class="field" style="margin:0;grid-column:1/4"><label>Description</label><input type="text" data-f="desc"></div>
+    </div>`);
+});
+$('saveServices').addEventListener('click', () => {
+  const services = [...document.querySelectorAll('#servicesEditor > div')].map(row => ({
+    name: row.querySelector('[data-f=name]').value.trim(),
+    price: row.querySelector('[data-f=price]').value.trim(),
+    desc: row.querySelector('[data-f=desc]').value.trim()
+  })).filter(s => s.name);
+  DB.set('services', services);
+  $('servicesMsg').textContent = '✅ Services saved — the Services page has been updated.';
+});
+
+/* ---------- business info ---------- */
+function loadBiz(){
+  const b = getBiz();
+  ['Name','Phone','Whatsapp','Email','Address','Hours','Map'].forEach(k => $('b'+k).value = b[k.toLowerCase()] || '');
+}
+$('saveBiz').addEventListener('click', () => {
+  const b = getBiz();
+  ['Name','Phone','Whatsapp','Email','Address','Hours','Map'].forEach(k => b[k.toLowerCase()] = $('b'+k).value.trim());
+  DB.set('biz', b);
+  $('bizMsg').textContent = '✅ Business info saved.';
+  renderBiz();
+});
+
+/* ---------- security ---------- */
+$('savePass').addEventListener('click', () => {
+  const cur = DB.get('admin_pass', 'admin123');
+  if($('oldPass').value !== cur){ $('passMsg').textContent = 'Current password is incorrect.'; return; }
+  if($('newPass').value.length < 6){ $('passMsg').textContent = 'New password must be at least 6 characters.'; return; }
+  DB.set('admin_pass', $('newPass').value);
+  $('passMsg').textContent = '✅ Password changed.';
+  $('oldPass').value = $('newPass').value = '';
+});
+
+function refreshAll(){ renderStats(); renderOrders(); loadPrices(); renderServicesEditor(); loadBiz(); }
+
+/* ---------- init ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  if(isLoggedIn()) showDash(); else showLogin();
+});
+</script>
+</body>
+</html>

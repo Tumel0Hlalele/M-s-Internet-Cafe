@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Printing Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand"><span class="logo">🖨️</span><span data-biz="name"></span></a>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="track.html">Track Order</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <a href="admin.html" class="nav-admin">Admin</a>
+      <a href="order.html" class="nav-cta">Order Printing Online</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2.6rem">
+  <div class="container">
+    <div class="center reveal"><h2>🖨️ Order Printing Online</h2>
+      <p class="muted">Upload your documents, choose your options and get an instant estimate.<br>Payment is made in-store when you collect — no online payment needed.</p></div>
+
+    <div class="grid grid-2" style="margin-top:2rem;align-items:start">
+      <!-- ===== FORM ===== -->
+      <form id="orderForm" class="card" novalidate>
+        <div id="formError" class="error" style="display:none"></div>
+
+        <div class="field">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" placeholder="e.g. Thabo Mokoena" required>
+        </div>
+
+        <div class="field">
+          <label for="phone">WhatsApp / Cellphone Number *</label>
+          <input type="tel" id="phone" placeholder="e.g. 082 123 4567" required>
+        </div>
+
+        <div class="field">
+          <label>Upload Your Documents * <small>(PDF, DOC, DOCX, JPG, PNG — max 15&nbsp;MB each)</small></label>
+          <div class="file-drop" id="fileDrop">
+            <p style="font-size:2rem">📄</p>
+            <p><b>Click to browse</b> or drag &amp; drop files here</p>
+            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.bmp" style="display:none">
+          </div>
+          <div class="file-list" id="fileList"></div>
+        </div>
+
+        <div class="field" id="manualPagesField" style="display:none">
+          <label for="manualPages">Number of pages <small>(Word documents &amp; images can't be counted automatically — please enter the page count)</small></label>
+          <input type="number" id="manualPages" min="1" value="1">
+        </div>
+
+        <div class="grid grid-2">
+          <div class="field">
+            <label>Print Type *</label>
+            <div class="radio-row" id="printTypeRow">
+              <label class="radio-pill"><input type="radio" name="printType" value="bw" checked><span>⚫ Black &amp; White</span></label>
+              <label class="radio-pill" id="colourPill"><input type="radio" name="printType" value="colour"><span>🌈 Colour</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label>Sides *</label>
+            <div class="radio-row">
+              <label class="radio-pill"><input type="radio" name="sides" value="single" checked><span>Single-sided</span></label>
+              <label class="radio-pill"><input type="radio" name="sides" value="double"><span>Double-sided</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="field">
+            <label for="copies">Number of Copies *</label>
+            <input type="number" id="copies" min="1" value="1" required>
+          </div>
+          <div class="field">
+            <label for="pageRange">Page Range <small>(optional — e.g. 1-5, 8, 10-12)</small></label>
+            <input type="text" id="pageRange" placeholder="All pages">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="instructions">Special Instructions <small>(optional)</small></label>
+          <textarea id="instructions" placeholder="e.g. Staple each copy, print 2 pages per sheet, urgent collection today…"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" id="submitBtn">✅ Submit Order</button>
+        <p class="muted center" style="font-size:.82rem;margin-top:.8rem">By submitting you agree to collect &amp; pay at the shop. We may confirm your quote on WhatsApp.</p>
+      </form>
+
+      <!-- ===== LIVE SUMMARY ===== -->
+      <div class="card summary-card">
+        <h3>🧾 Order Summary</h3>
+        <div id="summaryBox"></div>
+        <div class="summary-row total"><span>Estimated Total</span><b id="sumTotal">R0.00</b></div>
+        <p class="muted" style="font-size:.8rem;margin-top:.6rem">Estimate only — final amount confirmed at collection. Pay in Rands (ZAR) at the shop.</p>
+        <a data-biz-link="whatsapp" href="#" target="_blank" class="btn btn-wa btn-sm" style="margin-top:1rem">💬 Questions? WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container f-grid">
+    <div><h4 data-biz="name"></h4><p style="font-size:.92rem">Order online, collect in-store, pay at the counter.</p></div>
+    <div><h4>Quick Links</h4><p><a href="index.html">Home</a><br><a href="track.html">Track Order</a><br><a href="services.html">Services</a><br><a href="contact.html">Contact Us</a></p></div>
+    <div><h4>Contact</h4><p style="font-size:.92rem">📍 <span data-biz="address"></span><br>🕐 <span data-biz="hours"></span><br>💬 <span data-biz="phone"></span></p></div>
+  </div>
+  <div class="copy">© <span id="year"></span> <span data-biz="name"></span>. All rights reserved. | <a href="admin.html">Admin Login</a></div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+/* ================= ORDER SYSTEM ================= */
+if(window.pdfjsLib){ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; }
+
+const MAX_SIZE = 15 * 1024 * 1024;
+let uploadedFiles = [];          // {file, pages|null}
+const prices = getPrices();
+
+const $ = id => document.getElementById(id);
+const drop = $('fileDrop'), input = $('fileInput'), list = $('fileList');
+
+/* ---------- file handling ---------- */
+drop.addEventListener('click', () => input.click());
+['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+input.addEventListener('change', () => { addFiles(input.files); input.value=''; });
+
+async function addFiles(fileList){
+  for(const f of fileList){
+    if(f.size > MAX_SIZE){ showError(`"${f.name}" is larger than 15 MB. Please compress it or bring it to the shop.`); continue; }
+    const ext = f.name.split('.').pop().toLowerCase();
+    if(!['pdf','doc','docx','jpg','jpeg','png','gif','bmp'].includes(ext)){ showError(`"${f.name}" is not a supported format.`); continue; }
+    let entry = {file:f, pages:null};
+    if(ext === 'pdf'){
+      try{
+        const pdf = await pdfjsLib.getDocument({data: await f.arrayBuffer()}).promise;
+        entry.pages = pdf.numPages;
+      }catch(e){ /* will ask manual count */ }
+    }
+    uploadedFiles.push(entry);
+  }
+  renderFiles(); updateEstimate();
+}
+
+function renderFiles(){
+  list.innerHTML = uploadedFiles.map((e,i) =>
+    `<div class="file-chip"><span>📄 ${e.file.name} <small class="muted">(${(e.file.size/1024/1024).toFixed(2)} MB${e.pages ? ', '+e.pages+' pages' : ''})</small></span><button type="button" onclick="removeFile(${i})" title="Remove">✖</button></div>`).join('');
+  $('manualPagesField').style.display = needsManualCount() ? 'block' : 'none';
+}
+function removeFile(i){ uploadedFiles.splice(i,1); renderFiles(); updateEstimate(); }
+function needsManualCount(){ return uploadedFiles.some(e => e.pages === null); }
+
+/* ---------- page count ---------- */
+function parseRange(str, total){
+  const s = str.trim();
+  if(!s) return total;
+  const set = new Set();
+  s.split(',').forEach(part => {
+    part = part.trim(); if(!part) return;
+    const m = part.match(/^(\d+)\s*[-–]\s*(\d+)$/);
+    if(m){ let a=+m[1], b=+m[2]; if(a>b){const t=a;a=b;b=t;} for(let i=a;i<=b && i<=total;i++) if(i>=1) set.add(i); }
+    else if(/^\d+$/.test(part)){ const p=+part; if(p>=1 && p<=total) set.add(p); }
+  });
+  return set.size || total;
+}
+function totalPages(){
+  const auto = uploadedFiles.reduce((s,e) => s + (e.pages || 0), 0);
+  if(needsManualCount()){
+    const manual = Math.max(1, parseInt($('manualPages').value) || 1);
+    return auto + manual * uploadedFiles.filter(e => e.pages === null).length;
+  }
+  return auto;
+}
+
+/* ---------- live estimate ---------- */
+function currentEstimate(){
+  const pages = totalPages();
+  const selPages = parseRange($('pageRange').value, pages);
+  const copies = Math.max(1, parseInt($('copies').value) || 1);
+  const colour = document.querySelector('input[name="printType"]:checked').value === 'colour';
+  const unit = colour ? prices.colour : prices.bw;
+  return { pages, selPages, copies, colour, unit, total: unit * selPages * copies };
+}
+
+function updateEstimate(){
+  const e = currentEstimate();
+  const filesHtml = uploadedFiles.length
+    ? uploadedFiles.map(f => `<div class="summary-row"><span>📄 ${f.file.name}</span><span>${f.pages ?? '?'} pg</span></div>`).join('')
+    : `<div class="summary-row"><span class="muted">No files uploaded yet</span></div>`;
+  $('summaryBox').innerHTML = `
+    <div class="summary-row"><span>Print type</span><span>${e.colour ? '🌈 Colour' : '⚫ Black & White'}</span></div>
+    <div class="summary-row"><span>Price per page</span><span>${fmtR(e.unit)}</span></div>
+    <div class="summary-row"><span>Pages to print</span><span>${e.selPages} of ${e.pages}</span></div>
+    <div class="summary-row"><span>Copies</span><span>× ${e.copies}</span></div>
+    <div class="summary-row"><span>Sides</span><span>${document.querySelector('input[name="sides"]:checked').value === 'double' ? 'Double-sided' : 'Single-sided'}</span></div>
+    ${filesHtml}`;
+  $('sumTotal').textContent = fmtR(e.total);
+}
+
+['copies','pageRange','manualPages'].forEach(id => $(id).addEventListener('input', updateEstimate));
+document.querySelectorAll('input[name="printType"],input[name="sides"]').forEach(r => r.addEventListener('change', updateEstimate));
+
+/* colour option availability */
+if(!prices.colourEnabled){
+  const pill = $('colourPill');
+  pill.style.display = 'none';
+}
+
+/* ---------- validation & submit ---------- */
+function showError(msg){ const el = $('formError'); el.textContent = msg; el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'center'}); }
+function hideError(){ $('formError').style.display='none'; }
+
+$('orderForm').addEventListener('submit', async ev => {
+  ev.preventDefault(); hideError();
+  const name = $('fullName').value.trim();
+  const phone = $('phone').value.replace(/\D/g,'');
+  if(name.length < 2) return showError('Please enter your full name.');
+  if(phone.length < 9 || phone.length > 13) return showError('Please enter a valid cellphone number.');
+  if(!uploadedFiles.length) return showError('Please upload at least one document.');
+  if(needsManualCount() && (parseInt($('manualPages').value)||0) < 1) return showError('Please enter the number of pages for your Word documents/images.');
+
+  const btn = $('submitBtn'); btn.disabled = true; btn.textContent = '⏳ Uploading & submitting…';
+  try{
+    const e = currentEstimate();
+    const orderNo = 'IC-' + Date.now().toString(36).toUpperCase() + Math.floor(Math.random()*90+10);
+    const order = {
+      orderNo, createdAt: new Date().toISOString(),
+      name, phone: $('phone').value.trim(),
+      files: uploadedFiles.map(f => ({name:f.file.name, size:f.file.size, type:f.file.type, pages:f.pages})),
+      colour: e.colour, sides: document.querySelector('input[name="sides"]:checked').value,
+      copies: e.copies, pageRange: $('pageRange').value.trim(), pages: e.selPages,
+      instructions: $('instructions').value.trim(),
+      unitPrice: e.unit, total: e.total,
+      status: 'Order Received',
+      history: [{status:'Order Received', at: new Date().toISOString()}]
+    };
+    /* store file blobs in IndexedDB so admin can download them */
+    await FileStore.put(orderNo, uploadedFiles.map(f => f.file));
+    const orders = DB.get('orders', []); orders.push(order); DB.set('orders', orders);
+    location.href = 'confirm.html?order=' + orderNo;
+  }catch(err){
+    showError('Something went wrong submitting your order. Please try again or WhatsApp us.');
+    btn.disabled = false; btn.textContent = '✅ Submit Order';
+  }
+});
+
+/* ---------- IndexedDB file storage ---------- */
+const FileStore = {
+  db:null,
+  open(){ return new Promise((res,rej)=>{ if(this.db) return res(this.db);
+    const r = indexedDB.open('icafe_files',1);
+    r.onupgradeneeded = e => e.target.result.createObjectStore('files');
+    r.onsuccess = e => { this.db = e.target.result; res(this.db); };
+    r.onerror = rej; });},
+  async put(orderNo, files){ const db = await this.open();
+    const tx = db.transaction('files','readwrite'); const st = tx.objectStore('files');
+    files.forEach((f,i)=> st.put(f, orderNo+'_'+i));
+    return new Promise((res,rej)=>{ tx.oncomplete = res; tx.onerror = rej; }); },
+  async getAll(orderNo){ const db = await this.open(); const out=[];
+    await new Promise(res=>{ const c = db.transaction('files').objectStore('files').openCursor();
+      c.onsuccess = e => { const cur = e.target.result;
+        if(cur){ if(String(cur.key).indexOf(orderNo+'_')===0) out.push({key:cur.key, file:cur.value}); cur.continue(); }
+        else res(); };
+      c.onerror = () => res(); });
+    return out; },
+  async del(orderNo){ const db = await this.open(); const st = db.transaction('files','readwrite').objectStore('files');
+    const keys = (await this.getAll(orderNo)).map(x=>x.key);
+    keys.forEach(k=>st.delete(k)); }
+};
+
+updateEstimate();
+</script>
+</body>
+</html>

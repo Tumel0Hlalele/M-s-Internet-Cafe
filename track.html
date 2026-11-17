@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track My Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand"><span class="logo">🖨️</span><span data-biz="name"></span></a>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="track.html">Track Order</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <a href="admin.html" class="nav-admin">Admin</a>
+      <a href="order.html" class="nav-cta">Order Printing Online</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2.6rem">
+  <div class="container" style="max-width:640px">
+    <div class="center reveal"><h2>🔍 Track My Printing Order</h2>
+      <p class="muted">Enter your order number and the cellphone number you used when ordering.</p></div>
+
+    <form id="trackForm" class="card" style="margin-top:1.6rem">
+      <div class="field"><label for="tOrder">Order Number *</label>
+        <input type="text" id="tOrder" placeholder="e.g. IC-ABC12345" required></div>
+      <div class="field"><label for="tPhone">Cellphone Number *</label>
+        <input type="tel" id="tPhone" placeholder="e.g. 082 123 4567" required></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center">Check Status</button>
+    </form>
+
+    <div id="trackResult" style="margin-top:1.6rem"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container f-grid">
+    <div><h4 data-biz="name"></h4><p style="font-size:.92rem">Order online, collect in-store, pay at the counter.</p></div>
+    <div><h4>Quick Links</h4><p><a href="index.html">Home</a><br><a href="order.html">Order Printing</a><br><a href="services.html">Services</a><br><a href="contact.html">Contact Us</a></p></div>
+    <div><h4>Contact</h4><p style="font-size:.92rem">📍 <span data-biz="address"></span><br>🕐 <span data-biz="hours"></span><br>💬 <span data-biz="phone"></span></p></div>
+  </div>
+  <div class="copy">© <span id="year"></span> <span data-biz="name"></span>. All rights reserved. | <a href="admin.html">Admin Login</a></div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+const STATUSES = ['Order Received','Processing','Ready for Collection','Collected'];
+const $ = id => document.getElementById(id);
+
+$('trackForm').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const no = $('tOrder').value.trim().toUpperCase();
+  const phone = $('tPhone').value.replace(/\D/g,'');
+  const orders = DB.get('orders', []);
+  const o = orders.find(x => x.orderNo.toUpperCase() === no && x.phone.replace(/\D/g,'') === phone);
+  if(!o){
+    $('trackResult').innerHTML = `<div class="error">❌ No matching order found. Please check your order number and cellphone number, or <a data-biz-link="whatsapp" href="#" target="_blank">contact us on WhatsApp</a>.</div>`;
+    renderBiz(); return;
+  }
+  const idx = STATUSES.indexOf(o.status);
+  const fmt = iso => new Date(iso).toLocaleString('en-ZA',{dateStyle:'medium',timeStyle:'short'});
+  const hist = {};
+  (o.history||[]).forEach(h => hist[h.status] = h.at);
+  const badgeClass = ['badge-received','badge-processing','badge-ready','badge-collected'][idx] || 'badge-received';
+
+  $('trackResult').innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;align-items:center">
+        <div><p class="muted" style="font-size:.8rem;font-weight:700">ORDER</p><p class="order-no" style="font-size:1.3rem">${o.orderNo}</p></div>
+        <span class="badge ${badgeClass}">${o.status}</span>
+      </div>
+      <div class="summary-row"><span>Documents</span><span>${o.files.map(f=>f.name).join(', ')}</span></div>
+      <div class="summary-row"><span>Details</span><span>${o.pages} pages × ${o.copies} · ${o.colour?'Colour':'B&W'} · ${o.sides==='double'?'Double':'Single'}-sided</span></div>
+      <div class="summary-row total"><span>Amount payable at shop</span><b>${fmtR(o.total)}</b></div>
+      <h3 style="margin-top:1.4rem">Order Progress</h3>
+      <div class="timeline">
+        ${STATUSES.map((s,i)=>`
+          <div class="tl-item ${i<=idx?'done':''}">
+            <div class="t">${i<idx?'✓ ':''}${s}</div>
+            <div class="d">${hist[s] ? fmt(hist[s]) : (i===idx+1?'Waiting for previous step…':'Pending')}</div>
+          </div>`).join('')}
+      </div>
+      ${o.status==='Ready for Collection' ? `<div class="success-box">🎉 <b>Your prints are ready!</b> Visit us at <span data-biz="address"></span> during opening hours and pay ${fmtR(o.total)} at the counter.</div>` : ''}
+      ${o.status==='Collected' ? `<div class="success-box">✅ This order has been collected. Thank you for your business!</div>` : ''}
+      <a data-biz-link="whatsapp" href="#" target="_blank" class="btn btn-wa btn-sm" style="margin-top:1rem">💬 Follow up on WhatsApp</a>
+    </div>`;
+  renderBiz();
+});
+</script>
+</body>
+</html>

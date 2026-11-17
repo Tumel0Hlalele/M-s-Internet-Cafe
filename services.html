@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand"><span class="logo">🖨️</span><span data-biz="name"></span></a>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="track.html">Track Order</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <a href="admin.html" class="nav-admin">Admin</a>
+      <a href="order.html" class="nav-cta">Order Printing Online</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2.6rem">
+  <div class="container">
+    <div class="center reveal"><h2>🛠️ Our Services &amp; Prices</h2>
+      <p class="muted">Everything you need — printing, typing, applications and more. Prices confirmed at the counter.</p></div>
+    <div class="grid grid-3" id="servicesGrid" style="margin-top:2rem"></div>
+    <div class="success-box" style="margin-top:2rem">
+      💡 <b>Need something not listed?</b> Message us on WhatsApp — if it's digital or paper-related, we can probably help!
+      <a data-biz-link="whatsapp" href="#" target="_blank" class="btn btn-wa btn-sm" style="margin-left:.6rem">WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container f-grid">
+    <div><h4 data-biz="name"></h4><p style="font-size:.92rem">Order online, collect in-store, pay at the counter.</p></div>
+    <div><h4>Quick Links</h4><p><a href="index.html">Home</a><br><a href="order.html">Order Printing</a><br><a href="track.html">Track Order</a><br><a href="contact.html">Contact Us</a></p></div>
+    <div><h4>Contact</h4><p style="font-size:.92rem">📍 <span data-biz="address"></span><br>🕐 <span data-biz="hours"></span><br>💬 <span data-biz="phone"></span></p></div>
+  </div>
+  <div class="copy">© <span id="year"></span> <span data-biz="name"></span>. All rights reserved. | <a href="admin.html">Admin Login</a></div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+(function(){
+  const ICONS = ['🖨️','📄','💼','🎓','🕊️','🧾','📇','🌐','📠','📋'];
+  const defaults = [
+    {name:"Document Printing", price:"From R3.00/page", desc:"Black & white and colour printing of PDFs, Word docs and images. Single or double-sided, any quantity."},
+    {name:"CV Typing & Creation", price:"R80.00", desc:"Professional CVs typed from scratch or redesigned. Printed copies included."},
+    {name:"Job Applications", price:"From R50.00", desc:"CV printing, certified copy assistance, online job application submissions (indeed, careers portals, etc.)."},
+    {name:"School Applications", price:"From R50.00", desc:"University/college application support, document printing and certified copies."},
+    {name:"Funeral Programmes", price:"From R150.00", desc:"Respectful, professionally designed and printed funeral programmes with fast turnaround."},
+    {name:"Tax Number Registration", price:"R120.00", desc:"Assistance registering your SARS tax number quickly and correctly."},
+    {name:"Document Scanning", price:"R5.00/page", desc:"Scanning to PDF or email — contracts, IDs, certificates and photo albums."},
+    {name:"Internet Browsing", price:"R20.00/30 min", desc:"Fast internet access for emails, job searches, forms and downloads."},
+    {name:"Fax & Emailing", price:"R10.00/document", desc:"Send and receive faxes, or let us email your documents for you."}
+  ];
+  const services = DB.get('services', defaults);
+  document.getElementById('servicesGrid').innerHTML = services.map((s,i) => `
+    <div class="card reveal">
+      <div class="icon">${ICONS[i % ICONS.length]}</div>
+      <h3>${s.name}</h3>
+      <p class="muted">${s.desc || ''}</p>
+      <p style="margin-top:.7rem"><b style="color:var(--primary);font-size:1.1rem">${s.price}</b></p>
+    </div>`).join('');
+  initReveal();
+})();
+</script>
+</body>
+</html>

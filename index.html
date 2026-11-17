@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home | <span></span></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="brand"><span class="logo">🖨️</span><span data-biz="name"></span></a>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="track.html">Track Order</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <a href="admin.html" class="nav-admin">Admin</a>
+      <a href="order.html" class="nav-cta">Order Printing Online</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <h1>Fast, Affordable Printing — <span>Order Online, Collect In-Store</span></h1>
+      <p class="lead">Welcome to <b data-biz="name"></b>. Upload your documents from your phone or computer, choose your printing options, and collect your prints when they're ready. No queue, no waiting around.</p>
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap">
+        <a href="order.html" class="btn btn-accent">🖨️ Order Printing Online</a>
+        <a href="track.html" class="btn btn-ghost">Track My Order</a>
+      </div>
+      <div class="hero-badges">
+        <span>✅ Pay at collection</span><span>⚡ Same-day service</span><span>📱 Order from your phone</span>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>💰 Our Printing Prices</h3>
+      <div class="price-line"><span>Black &amp; White (per page)</span><b id="heroBwPrice">R3.00</b></div>
+      <div class="price-line" id="heroColourRow"><span>Full Colour (per page)</span><b id="heroColourPrice">R5.00</b></div>
+      <div class="price-line"><span>Double-sided</span><b>Same price</b></div>
+      <p style="font-size:.85rem;color:#c3d2ee;margin-top:.8rem">Example: 10 pages × R2.00 = <b style="color:var(--amber)">R20.00</b>. Final quote confirmed at the counter.</p>
+      <a href="order.html" class="btn btn-accent" style="width:100%;justify-content:center;margin-top:1rem">Get an Instant Estimate</a>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">“Skip the queue! Upload your documents online, place your printing order and simply collect them when they are ready.”</div>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="center reveal"><h2>How It Works</h2><p class="muted">From upload to collection in 4 easy steps</p></div>
+    <div class="grid grid-4" style="margin-top:2rem">
+      <div class="card reveal"><div class="step-num">1</div><h3>Upload Your Files</h3><p class="muted">Send us your PDF, Word documents or images straight from your phone or computer.</p></div>
+      <div class="card reveal"><div class="step-num">2</div><h3>Choose Your Options</h3><p class="muted">Pick black &amp; white or colour, single or double-sided, number of copies and page ranges.</p></div>
+      <div class="card reveal"><div class="step-num">3</div><h3>Get Your Estimate</h3><p class="muted">See your estimated total instantly. Submit your order and receive a unique order number.</p></div>
+      <div class="card reveal"><div class="step-num">4</div><h3>Collect &amp; Pay</h3><p class="muted">We print your documents. You get a notification when they're ready — pay in Rands at the shop.</p></div>
+    </div>
+    <div class="center" style="margin-top:2.2rem"><a href="order.html" class="btn btn-primary">Start Your Order Now →</a></div>
+  </div>
+</section>
+
+<!-- SERVICES PREVIEW -->
+<section class="section" style="background:#fff;padding-top:3.4rem;padding-bottom:3.4rem">
+  <div class="container">
+    <div class="center reveal"><h2>More Than Just Printing</h2><p class="muted">Your one-stop digital services shop</p></div>
+    <div class="grid grid-3" style="margin-top:2rem" id="homeServices"></div>
+    <div class="center" style="margin-top:2.2rem"><a href="services.html" class="btn btn-primary">View All Services &amp; Prices</a></div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="section">
+  <div class="container grid grid-3">
+    <div class="card reveal"><div class="icon">🕐</div><h3>Operating Hours</h3><p class="muted" data-biz="hours" style="white-space:pre-line"></p></div>
+    <div class="card reveal"><div class="icon">📍</div><h3>Visit Us</h3><p class="muted" data-biz="address"></p><a href="contact.html">Get directions →</a></div>
+    <div class="card reveal"><div class="icon">💬</div><h3>Talk To Us</h3><p class="muted">WhatsApp: <span data-biz="phone"></span><br>Email: <span data-biz="email"></span></p>
+      <a data-biz-link="whatsapp" href="#" target="_blank" class="btn btn-wa btn-sm" style="margin-top:.6rem">WhatsApp Us</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container f-grid">
+    <div>
+      <h4 data-biz="name"></h4>
+      <p style="font-size:.92rem">Your trusted neighbourhood internet café. Order printing online and skip the queue — pay when you collect.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <p><a href="order.html">Order Printing</a><br><a href="track.html">Track Order</a><br><a href="services.html">Services</a><br><a href="contact.html">Contact Us</a></p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p style="font-size:.92rem">📍 <span data-biz="address"></span><br>🕐 <span data-biz="hours"></span><br>💬 <span data-biz="phone"></span><br>✉️ <span data-biz="email"></span></p>
+    </div>
+  </div>
+  <div class="copy">© <span id="year"></span> <span data-biz="name"></span>. All rights reserved. | <a href="admin.html">Admin Login</a></div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+/* Homepage: load live prices + preview of services */
+(function(){
+  const p = getPrices();
+  document.getElementById('heroBwPrice').textContent = fmtR(p.bw);
+  document.getElementById('heroColourPrice').textContent = fmtR(p.colour);
+  if(!p.colourEnabled) document.getElementById('heroColourRow').style.display = 'none';
+
+  const defaults = [
+    {name:"Document Printing", price:"From R3.00/page"},
+    {name:"CV Typing & Creation", price:"R80.00"},
+    {name:"Job & School Applications", price:"From R50.00"},
+    {name:"Funeral Programmes", price:"From R150.00"},
+    {name:"Tax Number Registration", price:"R120.00"},
+    {name:"Scanning & More", price:"R5.00/page"}
+  ];
+  const services = DB.get('services', defaults);
+  document.getElementById('homeServices').innerHTML = services.slice(0,6).map(s =>
+    `<div class="card"><div class="icon">🖨️</div><h3>${s.name}</h3><p class="muted"><b>${s.price}</b></p></div>`).join('');
+})();
+</script>
+</body>
+</html>
